@@ -17,7 +17,7 @@ export class HeroService {
     private http: HttpClient) { }
 
   private log(message: string) {
-    this.messageService.add(`HeroService: ${message}`);
+    this.messageService.add(`TaskService: ${message}`);
   }
 
   private heroesUrl = 'api/heroes';  // URL to web api
@@ -26,8 +26,8 @@ export class HeroService {
   getHeroes (): Observable<Hero[]> {
     return this.http.get<Hero[]>(this.heroesUrl)
       .pipe(
-        tap(_ => this.log('fetched heroes')),
-        catchError(this.handleError<Hero[]>('getHeroes', []))
+        tap(_ => this.log('fetched tasks')),
+        catchError(this.handleError<Hero[]>('getTasks', []))
       );
   }
 
@@ -56,24 +56,24 @@ export class HeroService {
   getHero(id: number): Observable<Hero> {
     const url = `${this.heroesUrl}/${id}`;
     return this.http.get<Hero>(url).pipe(
-      tap(_ => this.log(`fetched hero id=${id}`)),
-      catchError(this.handleError<Hero>(`getHero id=${id}`))
+      tap(_ => this.log(`fetched task id=${id}`)),
+      catchError(this.handleError<Hero>(`getTask id=${id}`))
     );
   }
 
   /** PUT: update the hero on the server */
   updateHero (hero: Hero): Observable<any> {
     return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
-      tap(_ => this.log(`updated hero id=${hero.id}`)),
-      catchError(this.handleError<any>('updateHero'))
+      tap(_ => this.log(`updated task id=${hero.id}`)),
+      catchError(this.handleError<any>('updateTask'))
     );
   }
 
   /** POST: add a new hero to the server */
   addHero (hero: Hero): Observable<Hero> {
     return this.http.post<Hero>(this.heroesUrl, hero, httpOptions).pipe(
-      tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
-      catchError(this.handleError<Hero>('addHero'))
+      tap((newHero: Hero) => this.log(`added task with id=${newHero.id}`)),
+      catchError(this.handleError<Hero>('addTask'))
     );
   }
 
@@ -83,8 +83,8 @@ export class HeroService {
     const url = `${this.heroesUrl}/${id}`;
 
     return this.http.delete<Hero>(url, httpOptions).pipe(
-      tap(_ => this.log(`deleted hero id=${id}`)),
-      catchError(this.handleError<Hero>('deleteHero'))
+      tap(_ => this.log(`deleted task id=${id}`)),
+      catchError(this.handleError<Hero>('deleteTask'))
     );
   }
 
@@ -94,9 +94,9 @@ export class HeroService {
       // if not search term, return empty hero array.
       return of([]);
     }
-    return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
-      tap(_ => this.log(`found heroes matching "${term}"`)),
-      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    return this.http.get<Hero[]>(`${this.heroesUrl}/?title=${term}`).pipe(
+      tap(_ => this.log(`found tasks matching "${term}"`)),
+      catchError(this.handleError<Hero[]>('searchTask', []))
     );
   }
   
